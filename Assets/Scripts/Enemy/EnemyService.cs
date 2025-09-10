@@ -7,8 +7,9 @@ namespace CosmicCuration.Enemy
     public class EnemyService
     {
         #region Dependencies
-        private EnemyView enemyPrefab;
+       
         private EnemyScriptableObject enemyScriptableObject;
+        private EnemyPool enemyPool;
         #endregion
 
         #region Variables
@@ -18,11 +19,13 @@ namespace CosmicCuration.Enemy
         #endregion
 
         #region Initialization
-        public EnemyService(EnemyView enemyPrefab, EnemyScriptableObject enemyScriptableObject)
+        public EnemyService( EnemyView enemyPrefab ,EnemyScriptableObject enemyScriptableObject)
         {
-            this.enemyPrefab = enemyPrefab;
+          
             this.enemyScriptableObject = enemyScriptableObject;
+             enemyPool = new EnemyPool(enemyPrefab, enemyScriptableObject.enemyData);
             InitializeVariables();
+           
         }
 
         private void InitializeVariables()
@@ -53,13 +56,14 @@ namespace CosmicCuration.Enemy
             // Get a random orientation for the enemy (Up / Down / Left / Right)
             EnemyOrientation randomOrientation = (EnemyOrientation)Random.Range(0, Enum.GetValues(typeof(EnemyOrientation)).Length);
 
+
             // Calculate a spawn position outside the game screen according to the orientation and spawn an enemy.
             SpawnEnemyAtPosition(CalculateSpawnPosition(randomOrientation), randomOrientation);
         }
 
         private void SpawnEnemyAtPosition(Vector2 spawnPosition, EnemyOrientation enemyOrientation)
         {
-            EnemyController spawnedEnemy = new EnemyController(enemyPrefab, enemyScriptableObject.enemyData);
+            EnemyController spawnedEnemy = enemyPool.GetEnemy();
             spawnedEnemy.Configure(spawnPosition, enemyOrientation);
         }
 
@@ -108,6 +112,8 @@ namespace CosmicCuration.Enemy
         private void ResetSpawnTimer() => spawnTimer = currentSpawnRate;
 
         public void SetEnemySpawning(bool setActive) => isSpawning = setActive;
+
+        public void ReturnEnemyToPool(EnemyController enemy) => enemyPool.ReturnEnemy(enemy);
     }
 
     public enum EnemyOrientation
