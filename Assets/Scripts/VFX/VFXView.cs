@@ -13,12 +13,22 @@ namespace CosmicCuration.VFX
         {
             transform.position = positionToSet;
             vfx = GetComponent<ParticleSystem>();
+            gameObject.SetActive(true);
+
+            if (vfx != null)
+            {
+                vfx.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                vfx.Play();
+            }
         }
 
         private void Update()
         {
             if (vfx != null && vfx.isStopped)
-                    Destroy(gameObject);
+            {
+                // Inform controller so the controller can return itself to the pool
+                controller?.OnPlaybackFinished();
+            }
         }
     }
 }
