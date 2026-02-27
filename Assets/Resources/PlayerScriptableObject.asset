@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cf11c93be3416a419276a7ba9e370b1, type: 3}
   m_Name: PlayerScriptableObject
   m_EditorClassIdentifier: 
-  maxHealth: 80
+  maxHealth: 5
   movementSpeed: 5
   defaultFireRate: 1
   rapidFireRate: 0.2
