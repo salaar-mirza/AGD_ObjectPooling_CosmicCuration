@@ -12,13 +12,17 @@ namespace CosmicCuration.VFX
         public void ConfigureAndPlay(Vector2 positionToSet)
         {
             transform.position = positionToSet;
+            gameObject.SetActive(true);
             vfx = GetComponent<ParticleSystem>();
+            vfx.Play();
         }
 
         private void Update()
         {
             if (vfx != null && vfx.isStopped)
-                    Destroy(gameObject);
+            {
+                controller.OnVFXFinished();
+            }
         }
     }
 }
